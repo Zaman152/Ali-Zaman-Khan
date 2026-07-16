@@ -6,18 +6,22 @@ import BrushStroke from "./BrushStroke";
 interface ProjectSectionProps {
   title: string;
   projects: Project[];
+  index: number;
   flagship?: boolean;
 }
 
-export default function ProjectSection({ title, projects, flagship = false }: ProjectSectionProps) {
+export default function ProjectSection({ title, projects, index, flagship = false }: ProjectSectionProps) {
   return (
     <section className="section-padding" id={title.toLowerCase().replace(/[^a-z0-9]+/g, "-")}>
       <div className="content-container">
-        {/* Section header */}
+        {/* Section header — faint oversized numeral behind, catalog style */}
         <ScrollReveal>
-          <div className="mb-12 md:mb-16">
-            <h2 className="section-title mb-4">{title}</h2>
-            <BrushStroke className="w-full max-w-xs h-4" />
+          <div className="mb-12 md:mb-16 relative">
+            <span className="section-watermark" aria-hidden="true">
+              {String(index).padStart(2, "0")}
+            </span>
+            <h2 className="section-title mb-4 relative">{title}</h2>
+            <BrushStroke className="w-full max-w-xs h-4 relative" />
           </div>
         </ScrollReveal>
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import InkBranch from "./InkBranch";
 import VerticalBrushStroke from "./VerticalBrushStroke";
 import InkSplatter from "./InkSplatter";
@@ -11,65 +11,111 @@ export default function Hero() {
   const [lettersVisible, setLettersVisible] = useState<boolean[]>(
     new Array(TITLE.length).fill(false)
   );
-  const [branchVisible, setBranchVisible] = useState(false);
+  const [inkVisible, setInkVisible] = useState(false);
   const [prefersReduced, setPrefersReduced] = useState(false);
+  const branchRef = useRef<HTMLDivElement>(null);
+
+  // Gentle parallax: the branch drifts down slightly as the page scrolls
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let raf = 0;
+    const onScroll = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        if (branchRef.current) {
+          branchRef.current.style.transform = `translateY(${window.scrollY * 0.08}px)`;
+        }
+      });
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(raf);
+    };
+  }, []);
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
     if (mq.matches) {
       setPrefersReduced(true);
       setLettersVisible(new Array(TITLE.length).fill(true));
-      setBranchVisible(true);
+      setInkVisible(true);
       return;
     }
 
+    const timers: ReturnType<typeof setTimeout>[] = [];
     TITLE.split("").forEach((_, i) => {
-      setTimeout(() => {
-        setLettersVisible((prev) => {
-          const next = [...prev];
-          next[i] = true;
-          return next;
-        });
-      }, 200 + i * 30);
+      timers.push(
+        setTimeout(() => {
+          setLettersVisible((prev) => {
+            const next = [...prev];
+            next[i] = true;
+            return next;
+          });
+        }, 200 + i * 30)
+      );
     });
-
-    setTimeout(() => setBranchVisible(true), 200 + TITLE.length * 30 + 600);
+    timers.push(
+      setTimeout(() => setInkVisible(true), 200 + TITLE.length * 30 + 600)
+    );
+    return () => timers.forEach(clearTimeout);
   }, []);
 
+  const inkFade = (delay = 0) => ({
+    opacity: inkVisible ? 1 : 0,
+    transition: prefersReduced ? "none" : `opacity 900ms ease ${delay}ms`,
+  });
+
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
-      {/* Decorative left vertical brushstroke */}
+    <section className="relative min-h-[85vh] md:min-h-[92vh] flex flex-col items-center justify-center overflow-hidden">
+      {/* Autumn moon — a faint warm wash rising behind the title */}
       <div
-        className="absolute left-6 md:left-12 top-1/2 -translate-y-1/2 w-12 h-72 pointer-events-none"
+        className="absolute left-[55%] top-[42%] -translate-x-1/2 -translate-y-1/2 w-[380px] h-[380px] md:w-[560px] md:h-[560px] rounded-full pointer-events-none"
         style={{
-          opacity: branchVisible ? 1 : 0,
-          transition: prefersReduced ? "none" : "opacity 800ms ease 200ms",
+          ...inkFade(250),
+          background:
+            "radial-gradient(circle, rgba(155,77,58,0.10) 0%, rgba(155,77,58,0.05) 48%, rgba(155,77,58,0) 68%)",
         }}
+      />
+      {/* Ink branch — bleeds in from the right edge, riding the title line */}
+      <div
+        className="absolute right-0 top-[24%] sm:top-[40%] -translate-y-1/2 w-52 sm:w-96 md:w-[520px] lg:w-[680px] pointer-events-none"
+        style={inkFade(0)}
       >
-        <VerticalBrushStroke className="w-full h-full" />
+        <div ref={branchRef}>
+          <div className="branch-sway">
+            <InkBranch className="w-full h-auto" animate={inkVisible} />
+          </div>
+        </div>
       </div>
 
-      {/* Decorative scattered ink */}
+      {/* Calligraphic glyphs + red seal — left margin, lower half */}
       <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          opacity: branchVisible ? 1 : 0,
-          transition: prefersReduced ? "none" : "opacity 1000ms ease 400ms",
-        }}
+        className="absolute left-4 md:left-12 top-[66%] -translate-y-1/2 w-14 md:w-[76px] pointer-events-none hidden sm:block"
+        style={inkFade(150)}
       >
-        <div className="absolute top-1/4 left-1/4 w-40 h-40">
+        <div className="glyph-sway">
+          <VerticalBrushStroke className="w-full h-auto" animate={inkVisible} />
+        </div>
+      </div>
+
+      {/* Drifting petals and ink flecks */}
+      <div className="absolute inset-0 pointer-events-none" style={inkFade(300)}>
+        <div className="absolute top-[8%] left-[12%] w-40 md:w-64 h-40 md:h-64">
           <InkSplatter className="w-full h-full" />
         </div>
-        <div className="absolute bottom-1/3 right-1/3 w-32 h-32 rotate-45">
+        <div className="absolute top-[16%] right-[18%] w-52 h-52 rotate-90 hidden md:block">
+          <InkSplatter className="w-full h-full" />
+        </div>
+        <div className="absolute bottom-[12%] left-[30%] w-40 md:w-60 h-40 md:h-60 -rotate-45">
           <InkSplatter className="w-full h-full" />
         </div>
       </div>
 
       {/* Hero content */}
-      <div className="relative z-10 flex flex-col items-center text-center px-6 max-w-5xl mx-auto">
-        {/* Eyebrow */}
+      <div className="relative z-10 flex flex-col items-center text-center px-6 max-w-6xl mx-auto">
         <p
-          className="eyebrow mb-8 md:mb-10"
+          className="eyebrow mb-8 md:mb-12"
           style={{
             opacity: lettersVisible[0] ? 1 : 0,
             transition: prefersReduced ? "none" : "opacity 600ms ease",
@@ -78,30 +124,41 @@ export default function Hero() {
           AUTOMATION &amp; AI SYSTEMS
         </p>
 
-        {/* Main title — letter by letter */}
+        {/* Main title — letter by letter, wrapping only between words */}
         <h1
-          className="title-hero mb-6 md:mb-8 flex flex-wrap justify-center"
+          className="title-hero mb-8 md:mb-10 flex flex-wrap justify-center gap-x-[0.5em]"
           aria-label={TITLE}
         >
-          {TITLE.split("").map((char, i) => (
-            <span
-              key={i}
-              style={{
-                opacity: lettersVisible[i] ? 1 : 0,
-                transform: lettersVisible[i] ? "translateY(0)" : "translateY(8px)",
-                transition: prefersReduced
-                  ? "none"
-                  : "opacity 400ms ease, transform 400ms ease",
-                display: "inline-block",
-                whiteSpace: char === " " ? "pre" : "normal",
-              }}
-            >
-              {char}
-            </span>
-          ))}
+          {(() => {
+            let letterIndex = -1;
+            return TITLE.split(" ").map((word, w) => (
+              <span key={w} className="whitespace-nowrap">
+                {word.split("").map((char) => {
+                  letterIndex += 1;
+                  const i = letterIndex;
+                  return (
+                    <span
+                      key={i}
+                      style={{
+                        opacity: lettersVisible[i] ? 1 : 0,
+                        transform: lettersVisible[i]
+                          ? "translateY(0)"
+                          : "translateY(8px)",
+                        transition: prefersReduced
+                          ? "none"
+                          : "opacity 400ms ease, transform 400ms ease",
+                        display: "inline-block",
+                      }}
+                    >
+                      {char}
+                    </span>
+                  );
+                })}
+              </span>
+            ));
+          })()}
         </h1>
 
-        {/* Tagline */}
         <p
           className="tagline"
           style={{
@@ -111,32 +168,31 @@ export default function Hero() {
         >
           Where automation becomes intelligence.
         </p>
+
+        {/* Tool stack — quiet enumeration under the tagline */}
+        <p className="eyebrow mt-10 md:mt-12" style={inkFade(400)}>
+          {["N8N", "MAKE.COM", "GOHIGHLEVEL", "ZAPIER", "NEXT.JS"].map(
+            (tool, i, arr) => (
+              <span key={tool}>
+                {tool}
+                {i < arr.length - 1 && (
+                  <span style={{ color: "var(--terracotta)" }}> · </span>
+                )}
+              </span>
+            )
+          )}
+        </p>
       </div>
 
-      {/* Ink branch — right side */}
+      {/* Scroll indicator — a single quiet line */}
       <div
-        className="absolute right-0 top-1/2 -translate-y-1/2 w-72 md:w-96 lg:w-[520px] pointer-events-none"
-        style={{
-          opacity: branchVisible ? 0.42 : 0,
-          transition: prefersReduced ? "none" : "opacity 600ms ease",
-        }}
+        className="absolute bottom-10 left-1/2 -translate-x-1/2"
+        style={inkFade(450)}
       >
-        <InkBranch className="w-full h-auto" />
-      </div>
-
-      {/* Scroll indicator */}
-      <div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
-        style={{
-          opacity: branchVisible ? 1 : 0,
-          transition: prefersReduced ? "none" : "opacity 600ms ease 300ms",
-        }}
-      >
-        <span className="eyebrow text-[9px]">SCROLL</span>
         <div
-          className="w-px h-8 bg-ink-light"
+          className="scroll-line"
           style={{
-            animation: prefersReduced ? "none" : "scrollBounce 2s ease-in-out infinite",
+            animation: prefersReduced ? "none" : "scrollBounce 2.4s ease-in-out infinite",
           }}
         />
       </div>
