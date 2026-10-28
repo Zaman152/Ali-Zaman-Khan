@@ -109,6 +109,19 @@ export const n8nProjects: Project[] = [
     stack: ["n8n", "PostgreSQL", "Node.js", "Shopify", "Stripe", "PayPal", "Slack", "Healthchecks.io", "Next.js"],
     links: [],
   },
+  {
+    name: "TCA Wireless — Multi-Store Lead Engagement & Reporting",
+    description: "Three-track platform for a 4-location Hawaii phone repair chain. Track A: omnichannel AI chatbot across WhatsApp, Instagram, Messenger, and website with shared pricing engine and staff handoff. Track B: RepairDesk → n8n → Supabase → Next.js attribution dashboard with 67-table schema and five dashboard tabs. Track C: full GHL migration with Google Ads, Meta, and GTM layers.",
+    stack: ["n8n", "GHL", "WhatsApp API", "Instagram API", "Meta API", "Google Ads", "GTM", "Node.js", "Supabase", "Next.js"],
+    links: [],
+    flagship: true,
+  },
+  {
+    name: "Arbor Legacy Lawyers — AI Voice Receptionist (Riley)",
+    description: "Inbound AI receptionist for a multi-state law firm. Qualifies callers, routes by state and asset thresholds (Georgia callers go through asset qualification, Tennessee callers route directly). Books 15-minute consultations, maps offices to GHL subaccounts, and pushes structured post-call data back to GHL via webhooks.",
+    stack: ["Retell AI", "n8n", "GHL", "Supabase"],
+    links: [],
+  },
 ];
 
 export const makeProjects: Project[] = [
@@ -141,6 +154,13 @@ export const makeProjects: Project[] = [
     description: "AI-powered proposal generation system creating customized proposals from customer data.",
     stack: ["Make.com", "AI", "GHL"],
     links: ["https://tinyurl.com/3rsej33a"],
+  },
+  {
+    name: "Flip Ready — Real Estate Dispositions System",
+    description: "When a property goes under contract, the system markets it to investor buyers via two paths: an internal vetted-buyer campaign with county matching and auto email/SMS, and an Investor Base scraper (Selenium/FastAPI on Railway). All buyers feed into WAVV calling pipelines. Includes duplicate checks, cross-account property copies, and 7 live Make.com scenarios.",
+    stack: ["GHL", "Make.com", "Railway", "FastAPI", "Selenium", "PostgreSQL", "WAVV"],
+    links: [],
+    flagship: true,
   },
 ];
 
@@ -286,6 +306,12 @@ export const zapierProjects: Project[] = [
     stack: ["JustCall", "Zapier", "Monday.com", "QuickBooks", "GetSign", "Calendly", "Gmail"],
     links: ["https://tinyurl.com/paint-cabin"],
   },
+  {
+    name: "Cheryl Porter Method — Email Marketing Migration",
+    description: "Event-based email automation replacing ActiveCampaign list-triggered automations with Klaviyo. Covers Teachable and ClickFunnels purchase paths with 15 Zapier workflows and a Klaviyo flow for course progress tracking.",
+    stack: ["Zapier", "Klaviyo", "Teachable", "ClickFunnels", "ActiveCampaign"],
+    links: [],
+  },
 ];
 
 export const customApps: Project[] = [
@@ -331,6 +357,30 @@ export const customApps: Project[] = [
     links: ["https://app.alphavenue.ai/"],
     flagship: true,
   },
+  {
+    name: "FoxReach",
+    description: "Cold email outreach SaaS with inbox warmup, rotation, AI reply sorting, deliverability monitoring, multi-workspace support, and API-first architecture. Paid plans from $27/mo.",
+    stack: ["FastAPI", "Celery", "PostgreSQL", "Redis", "Next.js", "nginx", "Python"],
+    links: [],
+    flagship: true,
+  },
+];
+
+export const revopsProjects: Project[] = [
+  {
+    name: "TCA Wireless — Multi-Store Repair Shop Analytics Dashboard",
+    description: "Syncs RepairDesk data into a normalized SQL layer, blends in GHL, Google Ads, and Meta data for a full analytics dashboard. Covers margin analysis, technician performance metrics, buyback pipeline tracking, and attribution health scoring across 4 store locations.",
+    stack: ["n8n", "RepairDesk API", "GHL", "Google Ads API", "Meta Graph API", "PostgreSQL", "Next.js"],
+    links: [],
+    flagship: true,
+  },
+  {
+    name: "Odyssey Function Energy Dashboard",
+    description: "Consolidates sales and marketing data from multiple channels into a unified Supabase database — one row per channel per day. Provides blended performance overview, channel-level breakdowns, and margin trend analysis for executive reporting.",
+    stack: ["Next.js", "React", "TypeScript", "Tailwind", "Supabase", "PostgreSQL", "Shopify GraphQL", "ShopifyQL", "QuickBooks", "TikTok Shop", "Meta Ads", "Impact.com"],
+    links: [],
+    flagship: true,
+  },
 ];
 
 export const projectSections: ProjectSection[] = [
@@ -339,4 +389,5 @@ export const projectSections: ProjectSection[] = [
   { id: "ghl", title: "GHL Complete Setups", projects: ghlProjects },
   { id: "zapier", title: "Zapier Integrations", projects: zapierProjects },
   { id: "custom", title: "Custom Apps / SaaS", projects: customApps },
+  { id: "revops", title: "RevOps & Analytics", projects: revopsProjects },
 ];
