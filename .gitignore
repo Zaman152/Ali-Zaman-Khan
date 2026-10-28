@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Prompt assets (not part of the site)
+REVIEW-AND-PUSH-PROMPT.md
+prompt-assets/
