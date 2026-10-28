@@ -1,28 +1,33 @@
+import Nav from "./components/Nav";
+import StarField from "./components/StarField";
 import Hero from "./components/Hero";
+import DotMatrix from "./components/DotMatrix";
+import Services from "./components/Services";
+import Projects from "./components/Projects";
 import About from "./components/About";
-import ProjectSection from "./components/ProjectSection";
+import TechStack from "./components/TechStack";
 import Contact from "./components/Contact";
-import PetalCanvas from "./components/PetalCanvas";
-import { projectSections } from "./data/projects";
+import BotReveal from "./components/BotReveal";
+import Footer from "./components/Footer";
 
 export default function Home() {
   return (
     <>
-      <PetalCanvas />
-      <main className="relative z-10">
+      <StarField count={50} />
+      <Nav />
+      <main style={{ position: "relative", zIndex: 1 }}>
         <Hero />
+        <DotMatrix />
+        <Services />
+        <DotMatrix />
+        <Projects />
+        <DotMatrix />
         <About />
-        {projectSections.map((section, i) => (
-          <ProjectSection
-            key={section.id}
-            title={section.title}
-            projects={section.projects}
-            index={i + 1}
-            flagship={section.id === "custom"}
-          />
-        ))}
+        <TechStack />
         <Contact />
+        <BotReveal />
       </main>
+      <Footer />
     </>
   );
 }
