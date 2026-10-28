@@ -1,26 +1,12 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Inter } from "next/font/google";
+import "@fontsource-variable/inter";
+import "@fontsource-variable/syne";
 import "./globals.css";
 
-const cormorant = Cormorant_Garamond({
-  subsets: ["latin"],
-  weight: ["300", "400", "500"],
-  style: ["normal", "italic"],
-  variable: "--font-cormorant",
-  display: "swap",
-});
-
-const inter = Inter({
-  subsets: ["latin"],
-  weight: ["300", "400"],
-  variable: "--font-inter",
-  display: "swap",
-});
-
 export const metadata: Metadata = {
-  title: "Ali Zaman — Automation & AI Systems",
+  title: "Ali Zaman — Automation & AI Systems Architect",
   description:
-    "Portfolio of Ali Zaman: end-to-end automation systems, AI voice agents, and custom SaaS applications.",
+    "I build end-to-end automation systems, AI agents, and custom SaaS applications using N8N, Make.com, GHL, Supabase, and Next.js.",
 };
 
 export default function RootLayout({
@@ -29,7 +15,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${cormorant.variable} ${inter.variable}`}>
+    <html lang="en">
       <body>{children}</body>
     </html>
   );
