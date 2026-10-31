@@ -6,8 +6,10 @@ interface JimoBotProps {
 
 export default function JimoBot({ size = "hero" }: JimoBotProps) {
   const isLarge = size === "large";
-  const w = isLarge ? 800 : 560;
-  const h = isLarge ? 600 : 440;
+  const w = isLarge ? 800 : 600;
+  const h = isLarge ? 620 : 480;
+  const eyeW = isLarge ? 90 : 65;
+  const eyeH = isLarge ? 130 : 95;
 
   return (
     <div
@@ -20,13 +22,32 @@ export default function JimoBot({ size = "hero" }: JimoBotProps) {
         animation: "float 8s ease-in-out infinite",
       }}
     >
-      {/* Head outline */}
+      {/* Head outline — brighter, with glow trail */}
       <div
         style={{
           position: "absolute",
           inset: 0,
-          border: "2px solid rgba(255,255,255,0.1)",
-          borderRadius: "40% 40% 35% 35%",
+          borderRadius: "42% 42% 36% 36%",
+          border: "1.5px solid rgba(255,255,255,0.12)",
+          boxShadow:
+            "0 0 30px rgba(255,255,255,0.03), inset 0 0 30px rgba(255,255,255,0.01)",
+        }}
+      />
+      {/* Light trail accent along top-right edge */}
+      <div
+        style={{
+          position: "absolute",
+          top: "2%",
+          right: "8%",
+          width: "55%",
+          height: "55%",
+          borderRadius: "50% 42% 0 0",
+          borderTop: "1.5px solid rgba(140,180,255,0.18)",
+          borderRight: "1.5px solid rgba(140,180,255,0.10)",
+          borderBottom: "none",
+          borderLeft: "none",
+          filter: "blur(0.5px)",
+          pointerEvents: "none",
         }}
       />
 
@@ -35,12 +56,13 @@ export default function JimoBot({ size = "hero" }: JimoBotProps) {
         style={{
           position: "absolute",
           left: "30%",
-          top: "50%",
+          top: "48%",
           transform: "translate(-50%,-50%)",
-          width: isLarge ? 80 : 60,
-          height: isLarge ? 120 : 90,
+          width: eyeW,
+          height: eyeH,
           borderRadius: "50%",
-          border: "2px solid rgba(255,255,255,0.15)",
+          border: "1.5px solid rgba(255,255,255,0.18)",
+          background: "rgba(59,130,246,0.04)",
           animation: "eyeGlow 3s ease-in-out infinite",
         }}
       />
@@ -50,12 +72,13 @@ export default function JimoBot({ size = "hero" }: JimoBotProps) {
         style={{
           position: "absolute",
           left: "65%",
-          top: "50%",
+          top: "48%",
           transform: "translate(-50%,-50%)",
-          width: isLarge ? 80 : 60,
-          height: isLarge ? 120 : 90,
+          width: eyeW,
+          height: eyeH,
           borderRadius: "50%",
-          border: "2px solid rgba(255,255,255,0.15)",
+          border: "1.5px solid rgba(255,255,255,0.18)",
+          background: "rgba(59,130,246,0.04)",
           animation: "eyeGlow 3s ease-in-out infinite",
           animationDelay: "0.3s",
         }}

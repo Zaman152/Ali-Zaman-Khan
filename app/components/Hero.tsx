@@ -20,19 +20,21 @@ export default function Hero() {
     >
       <ConcentricCircles top="55%" left="50%" />
 
+      {/* Bot — positioned below center so text sits above the head, bot peeks through */}
       <div
         style={{
           position: "absolute",
-          top: "50%",
+          bottom: "-10%",
           left: "50%",
-          transform: "translate(-50%, -40%)",
-          opacity: 0.35,
+          transform: "translateX(-50%)",
+          opacity: 0.55,
           zIndex: 0,
         }}
       >
         <JimoBot size="hero" />
       </div>
 
+      {/* Text content — positioned in upper-center area */}
       <div
         style={{
           position: "relative",
